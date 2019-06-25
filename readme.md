@@ -22,6 +22,9 @@ the place to submit your homework assignment (computational essay). There are te
 ### "Contributions" folder
 the place to store extra work products such as draft submissions to the data repo, function repo, neural net repo, and notebook archive. Follow the conventions described in the readme.md of that directory. There are instructions in the readme.md of the "Contributions" folder.
 
+### "Wolfram Community Post" folder
+the place to save versions of your community post so you can collaborate with your mentor if needed. There are instructions in the readme.md of the "Wolfram Community Post" folder.
+
 ## MORE INFO ABOUT USING GITHUB
 
 ### Download and install a Git UI
