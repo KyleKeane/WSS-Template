@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     12064,        300]
-NotebookOptionsPosition[      9309,        244]
-NotebookOutlinePosition[     10274,        277]
-CellTagsIndexPosition[     10206,        272]
+NotebookDataLength[      8340,        205]
+NotebookOptionsPosition[      6720,        164]
+NotebookOutlinePosition[      7684,        197]
+CellTagsIndexPosition[      7617,        192]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -41,15 +41,17 @@ Silas Kurt Grossberndt
 \tIn the fields of particle physics and music theory, the number 12 is \
 fundamental. For music, there are 12 tones to the chromatic scale (in the \
 western tradition) and, in particle physics, there are 12 fundamental \
-fermions. Particle physics is hard to understand, and often written in the \
-intractable, to the general public, code of Feynman diagrams. Further, \
-physics is often accused of failing to recognize the beauty and art of the \
-world, reducing mystery to mathematical equations. Thus, it would be of \
-interest to represent particle interactions and Feynman diagrams in a musical \
-manner. 
+fermions; just as Feynman diagrams are to be rotated and remain valid, \
+musicians from the second Viennese school, such as Schoenberg, defined \
+matrices to  give similar rotations on 12-tone music. Particle physics is \
+hard to understand, and often written in the intractable, to the general \
+public, code of Feynman diagrams. Further, physics is often accused of \
+failing to recognize the beauty and art of the world, reducing mystery to \
+mathematical equations. Thus, it would be of interest to represent particle \
+interactions and Feynman diagrams in a musical manner. 
 
 \t However, to just assign random notes to the particles would create a \
-cacophony. To display this issue, let us assign the twelve tones as below
+cacophony.To display this issue, let us assign the twelve tones as below
 \t \
 \>", "Text",
  CellChangeTimes->{{3.549624168509506*^9, 3.549624171985794*^9}, {
@@ -58,8 +60,10 @@ cacophony. To display this issue, let us assign the twelve tones as below
    3.77005561844785*^9, 3.7700556489651537`*^9}, {3.7704587851642103`*^9, 
    3.770458802667879*^9}, {3.7704606988107843`*^9, 3.7704609355225663`*^9}, {
    3.7704609658005586`*^9, 3.770461165496214*^9}, 3.770461246248561*^9, {
-   3.770461300745181*^9, 
-   3.770461330523324*^9}},ExpressionUUID->"94536f76-3fd2-4bf6-b228-\
+   3.770461300745181*^9, 3.770461330523324*^9}, {3.77063182927549*^9, 
+   3.7706318635828733`*^9}, {3.7706319235123205`*^9, 3.770632038461249*^9}, {
+   3.770632243495494*^9, 
+   3.7706322451171637`*^9}},ExpressionUUID->"94536f76-3fd2-4bf6-b228-\
 fa93ec9acae9"],
 
 Cell[BoxData[GridBox[{
@@ -93,153 +97,69 @@ Cell[BoxData[""], "Input",
   3.770461993001272*^9}},ExpressionUUID->"0fce87e4-e2e6-45e0-88c6-\
 a10a56148122"],
 
-Cell["\<\
-To test this input, let us consider a basic (non-physical) Feynman diagram \
-\>", "Text",
+Cell[TextData[{
+ "Now, the bosons must be added to create any physical Feynman Diagram. While \
+there is no clear way of performing this mapping, one can choose the \[Gamma] \
+to be the notes of the electron, muon and tau (E\[Flat], F, F\[Sharp]), the \
+gluon as the notes of the quarks, selecting one group of three and another \
+group of three to maintain a reasonable number of notes. To this end ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["g", "1"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "8e0f7df9-719c-424a-885a-5184565b5668"],
+ " is up, charm, top (A, B, C\[Sharp]) and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["g", "2"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "86432533-fdad-4a07-9f2b-bdde18d9bd1e"],
+ " is down, strange, bottom (B\[Flat], C, D). Then, as the Higgs coupling is \
+dependent on mass, we select the particle family that has the highest \
+(relative ) mass, i.e. top, bottom, tau and tau neutrino (C\[Sharp], D, F, A\
+\[Flat]). Then, the  ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["W", "+"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "2b3dcbc3-5bb8-4850-9df7-fe5614905927"],
+ "are the three neutrinos shifted up by a half-step, ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["W", "-"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "dff0fd8a-ca49-4a6c-a6ad-bc3d7ad73173"],
+ " is the three neutrinos shifted down a half step and ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["Z", "0"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "68f7e357-2a2a-459d-b051-3a5e09a5a888"],
+ " is the bare three neutrinos--(G, A\[Flat], A), (F, F\[Sharp], G) and (F\
+\[Sharp], G, G\[Sharp]) respectively. This method of mapping will be carried \
+through in the reaminder of this work, as it is strongly based in physical \
+reasoning. Consider the following interactions (electron-electron scattering \
+and Higgs decay through the bottom quark channel, where the higgs is produced \
+by Gluon Fusion, although understanding such processes are not relevant to \
+the discussion). "
+}], "Text",
  CellChangeTimes->{{3.770462000226883*^9, 3.770462000436857*^9}, {
-  3.7704620591646338`*^9, 3.77046208935101*^9}, {3.7704622997696314`*^9, 
-  3.7704623052822123`*^9}},ExpressionUUID->"9953483c-b9b4-436e-ae0e-\
+   3.7704620591646338`*^9, 3.77046208935101*^9}, {3.7704622997696314`*^9, 
+   3.7704623052822123`*^9}, 3.7706305943315463`*^9, {3.770630656360623*^9, 
+   3.7706311244503856`*^9}, {3.7706313255592546`*^9, 
+   3.7706315805452557`*^9}, {3.7706316241091948`*^9, 
+   3.7706318198217707`*^9}},ExpressionUUID->"9953483c-b9b4-436e-ae0e-\
 ffc136d544ff"],
 
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"Graph", "[", 
-  RowBox[{"{", 
-   RowBox[{
-   "1", " ", ",", " ", "2", ",", " ", "3", ",", " ", "4", ",", " ", "5"}], 
-   "}"}], " ", "]"}]], "Input",
- CellChangeTimes->{{3.770462104667221*^9, 3.770462112711886*^9}, {
-  3.7704621718889465`*^9, 3.7704621775476665`*^9}, {3.7704623486531754`*^9, 
-  3.7704624565304174`*^9}},
- CellLabel->
-  "In[114]:=",ExpressionUUID->"8400d128-a24c-421c-9986-c3057cd8e48c"],
-
-Cell[BoxData[
- RowBox[{"Graph", "[", 
-  RowBox[{"{", 
-   RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5"}], "}"}], 
-  "]"}]], "Output",
- CellChangeTimes->{{3.7704624359003587`*^9, 3.770462458488991*^9}},
- CellLabel->
-  "Out[114]=",ExpressionUUID->"81095a90-f52c-4558-a22b-24e2e93d6300"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
- RowBox[{"Graph", "[", 
-  RowBox[{"{", 
-   RowBox[{
-    RowBox[{"Labeled", "[", 
-     RowBox[{
-      RowBox[{"1", "\[Rule]", "3"}], ",", " ", "\"\<electron\>\""}], "]"}], 
-    ",", 
-    RowBox[{"Labeled", "[", 
-     RowBox[{
-      RowBox[{"3", "\[Rule]", "2"}], ",", " ", "\"\<muon\>\""}], "]"}], ",", 
-    RowBox[{"3", "\[Rule]", "4"}], ",", " ", 
-    RowBox[{"Labeled", "[", 
-     RowBox[{
-      RowBox[{"4", "\[Rule]", "5"}], ",", "\"\<muon\>\""}], "]"}], " ", ",", 
-    " ", 
-    RowBox[{"Labeled", "[", 
-     RowBox[{
-      RowBox[{"6", "\[Rule]", "4"}], ",", " ", "\"\<electron\>\""}], "]"}]}], 
-   "}"}], "]"}]], "Input",
- CellChangeTimes->{{3.7704624169243717`*^9, 3.7704624169253736`*^9}, {
-  3.770462504430797*^9, 3.770462569662408*^9}, {3.770462603708539*^9, 
-  3.7704626860372458`*^9}, {3.770462726784233*^9, 3.7704628800173073`*^9}, {
-  3.7704629234966373`*^9, 3.770462988336089*^9}, {3.770463067818019*^9, 
-  3.7704630781715827`*^9}, {3.77046320299825*^9, 3.7704632079969683`*^9}},
- CellLabel->
-  "In[132]:=",ExpressionUUID->"833760b1-8d29-41e1-9fab-e4820970d27a"],
-
-Cell[BoxData[
- GraphicsBox[
-  NamespaceBox["NetworkGraphics",
-   DynamicModuleBox[{Typeset`graph = HoldComplete[
-     Graph[{1, 3, 2, 4, 5, 
-      6}, {{{1, 2}, {2, 3}, {2, 4}, {4, 5}, {6, 4}}, Null}, {
-      EdgeLabels -> {
-        DirectedEdge[4, 5] -> "muon", DirectedEdge[6, 4] -> "electron", 
-         DirectedEdge[1, 3] -> "electron", DirectedEdge[3, 2] -> "muon"}}]]}, 
-    TagBox[GraphicsGroupBox[{
-       {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[
-        Medium], {ArrowBox[{{0., 3.}, {0., 2.}}, 0.030239520958083826`], 
-         InsetBox["\<\"electron\"\>", {0., 2.5}, ImageScaled[{0.5, 0.5}],
-          BaseStyle->"Graphics"]}, {
-         ArrowBox[{{0., 2.}, {0., 1.}}, 0.030239520958083826`], 
-         InsetBox["\<\"muon\"\>", {0., 1.5}, ImageScaled[{0.5, 0.5}],
-          BaseStyle->"Graphics"]}, 
-        ArrowBox[{{0., 2.}, {1., 1.}}, 0.030239520958083826`], {
-         ArrowBox[{{1., 1.}, {1., 0.}}, 0.030239520958083826`], 
-         InsetBox["\<\"muon\"\>", {1., 0.5}, ImageScaled[{0.5, 0.5}],
-          BaseStyle->"Graphics"]}, {
-         ArrowBox[{{1., 2.}, {1., 1.}}, 0.030239520958083826`], 
-         InsetBox["\<\"electron\"\>", {1., 1.5}, ImageScaled[{0.5, 0.5}],
-          BaseStyle->"Graphics"]}}, 
-       {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
-        DiskBox[{0., 3.}, 0.030239520958083826], 
-        DiskBox[{0., 2.}, 0.030239520958083826], 
-        DiskBox[{0., 1.}, 0.030239520958083826], 
-        DiskBox[{1., 1.}, 0.030239520958083826], 
-        DiskBox[{1., 0.}, 0.030239520958083826], 
-        DiskBox[{1., 2.}, 0.030239520958083826]}}],
-     MouseAppearanceTag["NetworkGraphics"]],
-    AllowKernelInitialization->False]],
-  DefaultBaseStyle->{
-   "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.8, 1., 0.6]},
-  FormatType->TraditionalForm,
-  FrameTicks->None,
-  ImageMargins->{{9., 114.}, {4., 0.}},
-  ImageSize->{157.9023976039399, Automatic}]], "Output",
- CellChangeTimes->{
-  3.770462880604433*^9, 3.7704629370039473`*^9, {3.7704629674948053`*^9, 
-   3.770462989695099*^9}, 3.7704630793754425`*^9, 3.770463208675371*^9},
- CellLabel->
-  "Out[132]=",ExpressionUUID->"fc4acbca-a4b1-43d5-9e47-558a8a7f82fb"]
-}, Open  ]],
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.770630650769643*^9, 
+  3.7706306542331038`*^9}},ExpressionUUID->"6973d144-e783-4863-8c67-\
+77052d6f0838"],
 
 Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.770463161424221*^9, 3.770463170331479*^9}},
- NumberMarks->False,ExpressionUUID->"49fb5364-fb66-4be9-8e6c-a082148dbf03"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{3.7704631729494457`*^9},
- NumberMarks->False,ExpressionUUID->"1d4e7b82-5f1e-417d-a483-563f50e5edc6"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.7704631467746572`*^9, 
-  3.7704631467911873`*^9}},ExpressionUUID->"921e6288-318e-4e59-a35c-\
-c548837f90f2"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{3.7704631800424814`*^9},
- NumberMarks->False,ExpressionUUID->"02d71f86-2cbb-4d7b-bb99-e0b44fcbf2d8"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.77046317703874*^9, 
-  3.7704631770432425`*^9}},ExpressionUUID->"2e37c57f-a668-4882-a80d-\
-7fbb4c34eee4"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{3.770463152148224*^9},
- NumberMarks->False,ExpressionUUID->"1396db30-0ac1-4e3b-b7a8-d4108f96a0d4"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.7704631486907506`*^9, 
-  3.770463148701758*^9}},ExpressionUUID->"6e78e023-ecf9-4255-b7bb-\
-7457298a7482"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{3.7704626704486485`*^9},
- NumberMarks->False,ExpressionUUID->"2d8a1a04-2a76-408e-a414-b0694a67d3c3"],
-
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.7704626659825306`*^9, 
-  3.7704626659930525`*^9}},ExpressionUUID->"9c7bae33-fca5-435a-992b-\
-c02f80e73c5c"]
+ CellChangeTimes->{{3.770630642803999*^9, 
+  3.770630648718191*^9}},ExpressionUUID->"bf1f4ef1-235d-481f-9ac3-\
+887c9a4f4cdc"]
 }, Open  ]]
 },
 WindowSize->{766, 772},
@@ -271,7 +191,7 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"Title", 10067, 266}
+ {"Title", 7478, 186}
  }
 *)
 (*NotebookFileOutline
@@ -280,27 +200,12 @@ Cell[CellGroupData[{
 Cell[580, 22, 392, 8, 96, "Title",ExpressionUUID->"49ab34ee-bfd5-49f5-beef-400d3cc456dd",
  CellTags->"Title"],
 Cell[975, 32, 174, 3, 53, "Subtitle",ExpressionUUID->"3c44e224-b8da-4ed0-8bb2-4f83babff676"],
-Cell[1152, 37, 1367, 25, 276, "Text",ExpressionUUID->"94536f76-3fd2-4bf6-b228-fa93ec9acae9"],
-Cell[2522, 64, 820, 24, 270, "Text",ExpressionUUID->"a828973e-46b1-4249-91e2-39dfc76fdd66"],
-Cell[3345, 90, 152, 3, 28, "Input",ExpressionUUID->"0fce87e4-e2e6-45e0-88c6-a10a56148122"],
-Cell[3500, 95, 325, 6, 34, "Text",ExpressionUUID->"9953483c-b9b4-436e-ae0e-ffc136d544ff"],
-Cell[CellGroupData[{
-Cell[3850, 105, 428, 10, 28, "Input",ExpressionUUID->"8400d128-a24c-421c-9986-c3057cd8e48c"],
-Cell[4281, 117, 290, 7, 32, "Output",ExpressionUUID->"81095a90-f52c-4558-a22b-24e2e93d6300"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[4608, 129, 1092, 26, 48, "Input",ExpressionUUID->"833760b1-8d29-41e1-9fab-e4820970d27a"],
-Cell[5703, 157, 2182, 43, 424, "Output",ExpressionUUID->"fc4acbca-a4b1-43d5-9e47-558a8a7f82fb"]
-}, Open  ]],
-Cell[7900, 203, 168, 2, 28, "Input",ExpressionUUID->"49fb5364-fb66-4be9-8e6c-a082148dbf03"],
-Cell[8071, 207, 146, 2, 28, "Input",ExpressionUUID->"1d4e7b82-5f1e-417d-a483-563f50e5edc6"],
-Cell[8220, 211, 156, 3, 28, InheritFromParent,ExpressionUUID->"921e6288-318e-4e59-a35c-c548837f90f2"],
-Cell[8379, 216, 146, 2, 28, "Input",ExpressionUUID->"02d71f86-2cbb-4d7b-bb99-e0b44fcbf2d8"],
-Cell[8528, 220, 153, 3, 28, InheritFromParent,ExpressionUUID->"2e37c57f-a668-4882-a80d-7fbb4c34eee4"],
-Cell[8684, 225, 144, 2, 28, "Input",ExpressionUUID->"1396db30-0ac1-4e3b-b7a8-d4108f96a0d4"],
-Cell[8831, 229, 154, 3, 28, InheritFromParent,ExpressionUUID->"6e78e023-ecf9-4255-b7bb-7457298a7482"],
-Cell[8988, 234, 146, 2, 28, "Input",ExpressionUUID->"2d8a1a04-2a76-408e-a414-b0694a67d3c3"],
-Cell[9137, 238, 156, 3, 28, InheritFromParent,ExpressionUUID->"9c7bae33-fca5-435a-992b-c02f80e73c5c"]
+Cell[1152, 37, 1707, 29, 320, "Text",ExpressionUUID->"94536f76-3fd2-4bf6-b228-fa93ec9acae9"],
+Cell[2862, 68, 820, 24, 270, "Text",ExpressionUUID->"a828973e-46b1-4249-91e2-39dfc76fdd66"],
+Cell[3685, 94, 152, 3, 28, "Input",ExpressionUUID->"0fce87e4-e2e6-45e0-88c6-a10a56148122"],
+Cell[3840, 99, 2552, 52, 276, "Text",ExpressionUUID->"9953483c-b9b4-436e-ae0e-ffc136d544ff"],
+Cell[6395, 153, 154, 3, 28, "Input",ExpressionUUID->"6973d144-e783-4863-8c67-77052d6f0838"],
+Cell[6552, 158, 152, 3, 28, "Input",ExpressionUUID->"bf1f4ef1-235d-481f-9ac3-887c9a4f4cdc"]
 }, Open  ]]
 }
 ]
