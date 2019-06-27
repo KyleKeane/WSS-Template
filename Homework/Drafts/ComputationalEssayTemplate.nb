@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      8340,        205]
-NotebookOptionsPosition[      6720,        164]
-NotebookOutlinePosition[      7684,        197]
-CellTagsIndexPosition[      7617,        192]
+NotebookDataLength[      8394,        206]
+NotebookOptionsPosition[      6774,        165]
+NotebookOutlinePosition[      7738,        198]
+CellTagsIndexPosition[      7671,        193]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -139,7 +139,7 @@ dependent on mass, we select the particle family that has the highest \
 \[Sharp], G, G\[Sharp]) respectively. This method of mapping will be carried \
 through in the reaminder of this work, as it is strongly based in physical \
 reasoning. Consider the following interactions (electron-electron scattering \
-and Higgs decay through the bottom quark channel, where the higgs is produced \
+and Higgs decay through the bottom quark channel, where the Higgs is produced \
 by Gluon Fusion, although understanding such processes are not relevant to \
 the discussion). "
 }], "Text",
@@ -148,7 +148,8 @@ the discussion). "
    3.7704623052822123`*^9}, 3.7706305943315463`*^9, {3.770630656360623*^9, 
    3.7706311244503856`*^9}, {3.7706313255592546`*^9, 
    3.7706315805452557`*^9}, {3.7706316241091948`*^9, 
-   3.7706318198217707`*^9}},ExpressionUUID->"9953483c-b9b4-436e-ae0e-\
+   3.7706318198217707`*^9}, {3.7706325579998465`*^9, 
+   3.7706325583700905`*^9}},ExpressionUUID->"9953483c-b9b4-436e-ae0e-\
 ffc136d544ff"],
 
 Cell[BoxData[""], "Input",
@@ -191,7 +192,7 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"Title", 7478, 186}
+ {"Title", 7532, 187}
  }
 *)
 (*NotebookFileOutline
@@ -203,9 +204,9 @@ Cell[975, 32, 174, 3, 53, "Subtitle",ExpressionUUID->"3c44e224-b8da-4ed0-8bb2-4f
 Cell[1152, 37, 1707, 29, 320, "Text",ExpressionUUID->"94536f76-3fd2-4bf6-b228-fa93ec9acae9"],
 Cell[2862, 68, 820, 24, 270, "Text",ExpressionUUID->"a828973e-46b1-4249-91e2-39dfc76fdd66"],
 Cell[3685, 94, 152, 3, 28, "Input",ExpressionUUID->"0fce87e4-e2e6-45e0-88c6-a10a56148122"],
-Cell[3840, 99, 2552, 52, 276, "Text",ExpressionUUID->"9953483c-b9b4-436e-ae0e-ffc136d544ff"],
-Cell[6395, 153, 154, 3, 28, "Input",ExpressionUUID->"6973d144-e783-4863-8c67-77052d6f0838"],
-Cell[6552, 158, 152, 3, 28, "Input",ExpressionUUID->"bf1f4ef1-235d-481f-9ac3-887c9a4f4cdc"]
+Cell[3840, 99, 2606, 53, 276, "Text",ExpressionUUID->"9953483c-b9b4-436e-ae0e-ffc136d544ff"],
+Cell[6449, 154, 154, 3, 28, "Input",ExpressionUUID->"6973d144-e783-4863-8c67-77052d6f0838"],
+Cell[6606, 159, 152, 3, 28, "Input",ExpressionUUID->"bf1f4ef1-235d-481f-9ac3-887c9a4f4cdc"]
 }, Open  ]]
 }
 ]
