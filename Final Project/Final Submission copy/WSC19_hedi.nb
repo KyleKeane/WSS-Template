@@ -1,0 +1,1532 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     63327,       1524]
+NotebookOptionsPosition[     57531,       1428]
+NotebookOutlinePosition[     58336,       1455]
+CellTagsIndexPosition[     58293,       1452]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Captioning graphs of continuous functions ", "Title",
+ CellChangeTimes->{{3.770055572438499*^9, 3.7700555729498453`*^9}, {
+  3.770055604008165*^9, 3.7700556066618843`*^9}, {3.771774070434243*^9, 
+  3.77177408257051*^9}, {3.771865472171357*^9, 3.771865474995039*^9}, {
+  3.771929681490808*^9, 
+  3.771929684593316*^9}},ExpressionUUID->"49ab34ee-bfd5-49f5-beef-\
+400d3cc456dd"],
+
+Cell["Hedi Ben Daoud", "Text",
+ CellChangeTimes->{{3.549624168509506*^9, 3.549624171985794*^9}, {
+  3.549624508772977*^9, 3.549624510775043*^9}, {3.5498187159613867`*^9, 
+  3.5498187170087957`*^9}, {3.549819049020514*^9, 3.5498190533440437`*^9}, {
+  3.77005561844785*^9, 3.7700556489651537`*^9}, {3.77177408729727*^9, 
+  3.77177409232829*^9}, {3.771865476546853*^9, 3.771865479955441*^9}, {
+  3.771929686065219*^9, 
+  3.771929687481289*^9}},ExpressionUUID->"94536f76-3fd2-4bf6-b228-\
+fa93ec9acae9"],
+
+Cell["Jeremy Stratton-Smith", "Text",
+ CellChangeTimes->{{3.549624515773694*^9, 3.5496245246892014`*^9}, {
+  3.5498187208956137`*^9, 3.5498187221413403`*^9}, {3.5498190558319674`*^9, 
+  3.54981906151682*^9}, {3.770055624686027*^9, 3.770055659820487*^9}, {
+  3.77177409488048*^9, 3.771774123264045*^9}, {3.771865482058502*^9, 
+  3.771865483858655*^9}, {3.771929689353034*^9, 
+  3.7719296907051907`*^9}},ExpressionUUID->"b70c649b-a958-4202-9f22-\
+238ea1f9c7d4"],
+
+Cell[CellGroupData[{
+
+Cell["Abstract", "Section",
+ CellChangeTimes->{{3.77179856590733*^9, 
+  3.771798599168477*^9}},ExpressionUUID->"7836eb71-55f6-43e9-aeee-\
+dafacc0f6eb0"],
+
+Cell["\<\
+The project aims at extracting features from a function plot and expressing \
+them using different representations to provide a consistent machine \
+translation process. This work evaluates a function at different levels using \
+a set of pre-built functions and mathematical methods. The extracted features \
+were then mapped to a meaningful paragraph. The algorithms were tested on a \
+set of functions and plots and showed the desired results for continuous \
+polynomial and trigonometric functions. A sonification function was \
+implemented to express the graphs audibly. Different machine learning \
+algorithms were evaluated on a randomly generated dataset to classify curve \
+plots. The machine learning solution was able to generate a robust \
+discriminative model despite the data scarcity.\
+\>", "Text",
+ CellChangeTimes->{{3.7717986094319353`*^9, 3.7717986104881687`*^9}, {
+   3.77179911536495*^9, 3.7717991180761147`*^9}, {3.7717991705579653`*^9, 
+   3.771799205940297*^9}, {3.771799248182776*^9, 3.771799398600626*^9}, {
+   3.771799451410304*^9, 3.77179952505517*^9}, {3.771799962699079*^9, 
+   3.771800141468608*^9}, 3.771801644655539*^9, {3.7718019356160593`*^9, 
+   3.771801945863729*^9}, {3.771802006534028*^9, 3.771802116618004*^9}, {
+   3.771802147745831*^9, 3.7718022074087067`*^9}, {3.771926396783243*^9, 
+   3.7719264057392673`*^9}, {3.771926444656661*^9, 3.771926462681581*^9}, {
+   3.7719265947274*^9, 
+   3.771926611967877*^9}},ExpressionUUID->"6e06f440-b214-4977-9023-\
+45d488e9b243"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Introduction", "Section",
+ CellChangeTimes->{{3.771754251643757*^9, 
+  3.7717542535876637`*^9}},ExpressionUUID->"0330886e-d4a0-4fe9-b567-\
+9ca5e46fbea2"],
+
+Cell["\<\
+One of the most important tasks in data analysis and statistics is to \
+describe a plot in a way that expresses the parameters of a function and the \
+change in its variables. Automating this process is still an open-ended \
+problem that has been tackled in a number of ways. A graph provides a \
+sequence of features about the function behaviour within a predefined domain. \
+Extracting these features, however, and transforming them into natural \
+language is a a harder sub-problem due to its ill-defined constraints. This \
+work explores a set of approaches to reduce the task and optimize its final \
+caption. \
+\>", "Text",
+ CellChangeTimes->{{3.771714235489155*^9, 3.771714247864544*^9}, {
+   3.771714913729393*^9, 3.7717149163366947`*^9}, {3.771715222362607*^9, 
+   3.771715233250133*^9}, {3.771715421353715*^9, 3.771715724488264*^9}, {
+   3.771715780673349*^9, 3.7717160220975313`*^9}, {3.771716054611404*^9, 
+   3.771716073403557*^9}, {3.7717161099057617`*^9, 3.7717161643805513`*^9}, {
+   3.77171633081301*^9, 3.771716358060012*^9}, {3.7717163931202297`*^9, 
+   3.771716434845356*^9}, {3.771716508979376*^9, 3.771716509506804*^9}, {
+   3.7717165738928213`*^9, 3.771716602714446*^9}, {3.771716679661009*^9, 
+   3.771716786962472*^9}, {3.77171684171207*^9, 3.7717169090581408`*^9}, 
+   3.771716944225428*^9, {3.7717169953853292`*^9, 3.771717060852668*^9}, {
+   3.771717194597068*^9, 3.771717223138961*^9}, {3.771754258636417*^9, 
+   3.771754260620099*^9}, {3.77179780996561*^9, 3.771797813872793*^9}, {
+   3.771801722259533*^9, 3.771801770491253*^9}, {3.77180186792964*^9, 
+   3.771801899857074*^9}, 
+   3.771801933031253*^9},ExpressionUUID->"a8de2301-4b29-4b75-a65a-\
+ed4b028f54af"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Methods", "Section",
+ CellChangeTimes->{{3.771754234689711*^9, 
+  3.771754238691793*^9}},ExpressionUUID->"c07678c6-24b5-4c74-b53d-\
+dd8369ca0443"],
+
+Cell[CellGroupData[{
+
+Cell["   A heuristic approach", "Subsection",
+ CellChangeTimes->{{3.771717339243487*^9, 
+  3.771717355291334*^9}},ExpressionUUID->"62557530-fa44-4803-8383-\
+05a2d34381e5"],
+
+Cell["\<\
+The designed program takes as input the function expression and explores a \
+set of mathematical methods that evaluates the local and global extrema,  the \
+domain,  the periodicity and the exponent. The pre-built functions were used \
+to extract these features.\
+\>", "Text",
+ CellChangeTimes->{{3.771717368003005*^9, 3.771717369258747*^9}, {
+   3.771717443272561*^9, 3.771717579113681*^9}, {3.771717623473418*^9, 
+   3.771717632899797*^9}, {3.7717176665963593`*^9, 3.7717178015230427`*^9}, {
+   3.7717178327226152`*^9, 3.771717915887168*^9}, {3.771717953830599*^9, 
+   3.771718137389328*^9}, {3.771718197775823*^9, 3.771718238797977*^9}, {
+   3.771754341309268*^9, 3.771754505942823*^9}, {3.771754683325967*^9, 
+   3.7717548148029613`*^9}, {3.771754853571953*^9, 3.771754854851503*^9}, {
+   3.771754894928034*^9, 3.7717549401879663`*^9}, 3.771755037924294*^9, 
+   3.771755203806782*^9, {3.771755443224218*^9, 3.771755484718874*^9}, {
+   3.771755514988784*^9, 3.771755515806178*^9}, {3.771755721557333*^9, 
+   3.771755730508623*^9}, 3.771774600577156*^9, 3.771799406770618*^9, {
+   3.771841499125823*^9, 3.771841577449511*^9}, {3.7718416173765097`*^9, 
+   3.771841619095253*^9}},ExpressionUUID->"152167c8-9d78-46f4-8b0a-\
+b4742f4052d9"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"JustStateIt", "[", "xa_", "]"}], ":=", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", "\t", 
+   RowBox[{
+    RowBox[{"{", "justsayit", "}"}], ",", "\[IndentingNewLine]", "\t", 
+    RowBox[{
+     RowBox[{"justsayit", "=", " ", 
+      RowBox[{"StringJoin", "[", 
+       RowBox[{"\"\<This function plots \>\"", ",", "xa", ",", "\"\<. \>\""}],
+        "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"Sow", "[", 
+      RowBox[{"justsayit", ",", "\"\<speak\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Return", "[", "justsayit", "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Code",
+ CellChangeTimes->{
+  3.771774661680134*^9, {3.77177473078955*^9, 3.771774741613351*^9}},
+ CellLabel->"In[11]:=",ExpressionUUID->"b45b8977-a3c8-436b-a755-ef3b635e9b5a"],
+
+Cell["\<\
+Exploring pre-built functions to highlight the function features :
+* Periodicity : gives a period p of the function f over the reals such that \
+f(x+p) = f(x).\
+\>", "Text",
+ CellChangeTimes->{{3.771857617257736*^9, 3.771857627267692*^9}, {
+  3.771857778633897*^9, 3.771857796896624*^9}, {3.771857840389244*^9, 
+  3.77185784080516*^9}, {3.771930180383362*^9, 
+  3.7719302334474583`*^9}},ExpressionUUID->"bed829e1-1bf2-4be5-808c-\
+10057af1c705"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Periodicity1", "[", "xa_", "]"}], ":=", " ", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", "\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"period", ",", "expression"}], "}"}], ",", "\[IndentingNewLine]",
+     "\t", 
+    RowBox[{
+     RowBox[{"expression", " ", "=", " ", 
+      RowBox[{"ToExpression", "[", "xa", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"period", " ", "=", " ", "\"\<\>\""}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"FunctionPeriod", "[", 
+         RowBox[{"expression", " ", ",", "x"}], "]"}], "\[NotEqual]", " ", 
+        "0"}], ",", "\[IndentingNewLine]", "\t", 
+       RowBox[{"period", "=", 
+        RowBox[{"StringJoin", "[", " ", 
+         RowBox[{
+         "\"\<This function is Periodic so probably trigonometric with a \
+period of \>\"", ",", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"FunctionPeriod", "[", 
+            RowBox[{"expression", " ", ",", "x"}], "]"}], "]"}], ",", 
+          "\"\<. \>\""}], "]"}]}]}], "]"}], ";", "\[IndentingNewLine]", "\t", 
+     
+     RowBox[{"Sow", "[", 
+      RowBox[{"period", ",", "\"\<speak\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Return", "[", "period", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.771755573343132*^9, 3.771755671262485*^9}, {
+   3.7717557761709137`*^9, 3.77175577659534*^9}, 3.771774657193733*^9, {
+   3.771857568062683*^9, 3.771857569486816*^9}, {3.7718576012223682`*^9, 
+   3.77185763476045*^9}, {3.771933106795661*^9, 
+   3.77193311111572*^9}},ExpressionUUID->"0782d4a4-4e91-4c9e-bc1c-\
+ba82eb6ca09d"],
+
+Cell["\<\
+* Exponent : gives the maximum power with which form appears in the expanded \
+form of expr. \
+\>", "Text",
+ CellChangeTimes->{{3.7718578136005793`*^9, 3.7718578450371113`*^9}, {
+  3.7719302775831413`*^9, 
+  3.771930277786426*^9}},ExpressionUUID->"a3076a03-ce33-42c9-a7c1-\
+4afbd17aa5ca"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Exponentit", "[", "xa_", "]"}], ":=", " ", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", "\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"exp", ",", "expression"}], "}"}], ",", "\[IndentingNewLine]", 
+    "\t", 
+    RowBox[{
+     RowBox[{"expression", " ", "=", " ", 
+      RowBox[{"ToExpression", "[", "xa", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"exp", " ", "=", " ", "\"\<\>\""}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Exponent", "[", 
+         RowBox[{"expression", ",", "x"}], "]"}], "\[NotEqual]", " ", "0"}], 
+       " ", ",", 
+       RowBox[{"exp", " ", "=", " ", 
+        RowBox[{"StringJoin", "[", 
+         RowBox[{
+         "\"\<This function is polynomial. \>\"", ",", 
+          "\"\<The exponent of this function is \>\"", ",", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"Exponent", "[", 
+            RowBox[{"expression", ",", "x"}], "]"}], "]"}], ",", 
+          "\"\<. \>\""}], "]"}]}]}], "]"}], ";", "\[IndentingNewLine]", "\t", 
+     
+     RowBox[{"Sow", "[", 
+      RowBox[{"exp", ",", "\"\<speak\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Return", "[", "exp", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.771857582809725*^9, 3.771857584398336*^9}, {
+  3.771933093284233*^9, 
+  3.771933105284124*^9}},ExpressionUUID->"a4a61423-c0d6-435f-984b-\
+279b76927d4b"],
+
+Cell["\<\
+* Domain : finds the largest domain of definition of the real function f of \
+the variable x. \
+\>", "Text",
+ CellChangeTimes->{{3.77185782579209*^9, 3.7718578567888002`*^9}, {
+  3.771930309582325*^9, 
+  3.7719303103294563`*^9}},ExpressionUUID->"31afaa5e-76c5-46f2-9c0a-\
+9750347dba6e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Domaini", "[", "xa_", "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", "\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"exp", ",", "expression", ",", "nal"}], "}"}], ",", 
+    "\[IndentingNewLine]", "\t", 
+    RowBox[{
+     RowBox[{"expression", " ", "=", " ", 
+      RowBox[{"ToExpression", "[", "xa", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"nal", " ", "=", " ", 
+      RowBox[{"\"\<The function domain is \>\"", "<>", " ", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"FunctionDomain", "[", 
+            RowBox[{"expression", " ", ",", "x"}], "]"}], "\[NotEqual]", "  ",
+            "True"}], ")"}], ",", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"FunctionDomain", "[", 
+           RowBox[{"expression", " ", ",", "x"}], "]"}], "]"}], ",", 
+         "\"\<R\>\""}], "]"}], "<>", "\"\<. \>\""}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Sow", "[", 
+      RowBox[{"nal", ",", "\"\<speak\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Return", "[", "nal", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.771857593551906*^9, 3.771857594270033*^9}, {
+  3.771857892342105*^9, 3.771857893582818*^9}, {3.771933081628294*^9, 
+  3.771933085028214*^9}},ExpressionUUID->"7e17d046-07b8-49ea-8449-\
+bbd472beeaff"],
+
+Cell["* Plotting :", "Text",
+ CellChangeTimes->{{3.771857882142314*^9, 
+  3.7718578961418467`*^9}},ExpressionUUID->"6ca0bad6-dc7a-49a3-9c78-\
+633e2d8ca330"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"JustPlotIt", "[", 
+   RowBox[{"xa_", ",", "sa_", ",", "na_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", "\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"dao", ",", "exp"}], "}"}], ",", "\[IndentingNewLine]", "\t", 
+    RowBox[{
+     RowBox[{"exp", " ", "=", " ", 
+      RowBox[{"ToExpression", "[", "xa", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"dao", " ", "=", " ", 
+      RowBox[{"Plot", "[", 
+       RowBox[{"exp", ",", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", "sa", ",", "na"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Sow", "[", 
+      RowBox[{"dao", ",", "\"\<speak\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Return", "[", "dao", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.7719330869638767`*^9, 
+  3.771933090563986*^9}},ExpressionUUID->"bd136d9f-eae2-4bbd-b660-\
+3eafe701dabe"],
+
+Cell["\<\
+ To extract these features, the algorithm evaluates the function at \
+pointsD[f[x],x]==0 and D[f[x],x,2]>=0 for maximums and  D[f[x],x]==0 and  \
+D[f[x],x,2]<=0\[AliasDelimiter] for minimums within the predefined range. \
+Based on the maximums and minimums of a given plot, the algorithm splits the \
+function into intervals and samples these intervals over a list of points. By \
+calculating the mean of the scaled derivative at each of these points and \
+lower bounding it to the nearest threshold, the algorithm approximates the \
+evolution of that function and its rate. A set of sentences were concatenated \
+to produce a final meaningful paragraph.\[AliasDelimiter]\
+\>", "Text",
+ CellChangeTimes->{
+  3.771841483470752*^9, {3.771841517497414*^9, 3.771841520993547*^9}, 
+   3.77193302561874*^9, {3.7719330610171957`*^9, 
+   3.7719330716695957`*^9}},ExpressionUUID->"b9115761-ac08-4cf9-96e4-\
+401aedf213a1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MaxMin", "[", 
+   RowBox[{"xa_", ",", "na_", ",", "sa_"}], "]"}], ":=", " ", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", "\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "max", ",", "min", ",", "nice", ",", "max1", ",", "min1", ",", "df", ",",
+       " ", "global", ",", "global1", ",", "global2", ",", "global3", ",", 
+      "intervals", ",", "dal", ",", "dont", ",", "strings", ",", "expression",
+       ",", "final", ",", "final1", ",", "fn", ",", "\n", "\t\t", "globalmax",
+       ",", "globalmax1", ",", "globalmin", ",", "globalmin1", ",", 
+      "justreturn", ",", "finala"}], "}"}], ",", "\[IndentingNewLine]", "\t", 
+    
+    RowBox[{
+     RowBox[{"fn", " ", "=", " ", 
+      RowBox[{"ToExpression", "[", "xa", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"max", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"x", "/.", " ", 
+        RowBox[{"N", "[", 
+         RowBox[{"List", "[", 
+          RowBox[{"Solve", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"na", "\[LessEqual]", "x", "\[LessEqual]", "sa"}], ",", 
+              " ", 
+              RowBox[{
+               RowBox[{"D", "[", 
+                RowBox[{"fn", ",", "x"}], "]"}], "\[Equal]", "0"}], ",", 
+              RowBox[{
+               RowBox[{"D", "[", 
+                RowBox[{"fn", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"x", ",", "2"}], "}"}]}], "]"}], "\[LessEqual]", 
+               "0"}]}], "}"}], ",", "x"}], "]"}], "]"}], "]"}]}], "//", 
+       "Flatten"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"min", "=", " ", 
+      RowBox[{
+       RowBox[{"x", "/.", "  ", 
+        RowBox[{"N", "[", 
+         RowBox[{"List", "[", 
+          RowBox[{"Solve", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"na", "\[LessEqual]", "x", "\[LessEqual]", "sa"}], ",", 
+              " ", 
+              RowBox[{
+               RowBox[{"D", "[", 
+                RowBox[{"fn", ",", "x"}], "]"}], "\[Equal]", "0"}], ",", 
+              RowBox[{
+               RowBox[{"D", "[", 
+                RowBox[{"fn", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"x", ",", "2"}], "}"}]}], "]"}], "\[GreaterEqual]", 
+               " ", "0"}]}], "}"}], ",", "x"}], "]"}], "]"}], "]"}]}], " ", "//",
+        " ", "Flatten"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"nice", " ", "=", " ", 
+      RowBox[{"StringJoin", "[", 
+       RowBox[{"\"\<The plot has a total of \>\"", ",", 
+        RowBox[{"ToString", "[", 
+         RowBox[{
+          RowBox[{"Length", "[", "max", "]"}], "+", 
+          RowBox[{"Length", "[", "min", "]"}]}], "]"}], ",", 
+        "\"\< extremas. \>\""}], "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"max1", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+           "max", "\[LeftDoubleBracket]", "x3", "\[RightDoubleBracket]"}], 
+           ",", 
+           RowBox[{"Round", "[", 
+            RowBox[{
+             RowBox[{"fn", "/.", " ", 
+              RowBox[{"x", "\[Rule]", " ", 
+               RowBox[{
+               "max", "\[LeftDoubleBracket]", "x3", 
+                "\[RightDoubleBracket]"}]}]}], ",", "0.0001"}], "]"}]}], 
+          "}"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x3", ",", "1", ",", 
+          RowBox[{"Length", "[", "max", "]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"max1", "=", "  ", 
+      RowBox[{"N", "[", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"max1", ",", "1"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"globalmax", " ", "=", " ", 
+      RowBox[{"SortBy", "[", 
+       RowBox[{"max1", ",", "Last", ",", "Greater"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"globalmax1", " ", "=", " ", 
+      RowBox[{
+      "\"\<The plot has a global maximum \>\"", "<>", "\"\<of y = \>\"", "<>", 
+       RowBox[{"ToString", "[", 
+        RowBox[{"globalmax", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", "2"}], "]"}], "]"}], "]"}], "<>", 
+       "\"\<. \>\""}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"min1", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{
+           "min", "\[LeftDoubleBracket]", "x3", "\[RightDoubleBracket]"}], 
+           ",", 
+           RowBox[{"Round", "[", 
+            RowBox[{
+             RowBox[{"fn", "/.", " ", 
+              RowBox[{"x", "\[Rule]", " ", 
+               RowBox[{
+               "min", "\[LeftDoubleBracket]", "x3", 
+                "\[RightDoubleBracket]"}]}]}], ",", "0.0001"}], "]"}]}], 
+          "}"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x3", ",", "1", ",", 
+          RowBox[{"Length", "[", "min", "]"}]}], "}"}]}], "]"}]}], ";", 
+     RowBox[{"min1", " ", "=", " ", 
+      RowBox[{"N", "[", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"min1", ",", "1"}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"globalmin", " ", "=", " ", 
+      RowBox[{"SortBy", "[", 
+       RowBox[{"min1", ",", "Last"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"globalmin1", " ", "=", " ", 
+      RowBox[{
+      "\"\<The plot has a global minimum \>\"", "<>", "\"\<of y = \>\"", "<>", 
+       RowBox[{"ToString", "[", 
+        RowBox[{"globalmin", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", "2"}], "]"}], "]"}], "]"}], "<>", 
+       "\"\<. \>\""}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"min", ",", "max"}], "}"}], "=", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NMinValue", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"D", "[", 
+             RowBox[{"fn", ",", "x"}], "]"}], ",", 
+            RowBox[{"na", "\[LessEqual]", "x", "\[LessEqual]", "sa"}]}], 
+           "}"}], ",", "x"}], "]"}], ",", 
+        RowBox[{"NMaxValue", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"D", "[", 
+             RowBox[{"fn", ",", "x"}], "]"}], ",", 
+            RowBox[{"na", "\[LessEqual]", "x", "\[LessEqual]", "sa"}]}], 
+           "}"}], ",", "x"}], "]"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"df", "=", 
+      RowBox[{"Rescale", "[", 
+       RowBox[{
+        RowBox[{"D", "[", 
+         RowBox[{"fn", ",", "x"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"min", ",", "max"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1"}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"global", " ", "=", 
+      RowBox[{
+       RowBox[{"x", "/.", 
+        RowBox[{"N", "[", " ", 
+         RowBox[{"List", "[", 
+          RowBox[{"Solve", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"na", "\[LessEqual]", "x", "\[LessEqual]", "sa"}], ",", 
+              " ", 
+              RowBox[{
+               RowBox[{"D", "[", 
+                RowBox[{"fn", ",", "x"}], "]"}], "\[Equal]", "0"}]}], "}"}], 
+            ",", "x"}], "]"}], "]"}], "]"}]}], " ", "//", " ", "Flatten"}]}], 
+     ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"global", " ", "=", " ", 
+      RowBox[{"Sort", "[", "global", "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"global2", " ", "=", " ", 
+      RowBox[{"Insert", "[", 
+       RowBox[{"global", ",", "na", ",", "1"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"global1", " ", "=", " ", 
+      RowBox[{"global2", "[", 
+       RowBox[{"[", 
+        RowBox[{"2", ";;", 
+         RowBox[{"Length", "[", "global2", "]"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"global3", " ", "=", " ", 
+      RowBox[{"Insert", "[", 
+       RowBox[{"global1", ",", "sa", ",", 
+        RowBox[{
+         RowBox[{"Length", "[", "global1", "]"}], "+", "1"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"intervals", " ", "=", " ", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{"global2", ",", "global3"}], "}"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{
+     "dal", " ", "=", " ", 
+      "\"\<A proposed description of this plot based on the derivatives and \
+extremas : \>\""}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"dont", " ", "=", " ", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"Mean", "[", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"df", "/.", " ", 
+            RowBox[{"{", 
+             RowBox[{"x", "\[Rule]", " ", "x1"}], "}"}]}], " ", ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"x1", ",", 
+             RowBox[{"intervals", "[", 
+              RowBox[{"[", 
+               RowBox[{"n", ",", "1"}], "]"}], "]"}], ",", 
+             RowBox[{"intervals", "[", 
+              RowBox[{"[", 
+               RowBox[{"n", ",", "2"}], "]"}], "]"}], ",", "0.01"}], "}"}]}], 
+          "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"n", ",", "1", ",", 
+          RowBox[{"Length", "[", "intervals", "]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"strings", " ", "=", " ", 
+      RowBox[{"List", "[", 
+       RowBox[{
+       "\"\<a very sharp decrease\>\"", ",", "\"\<a sharp decrease\>\"", ",", 
+        "\"\<a smooth decline\>\"", ",", "\"\<a very smooth decline\>\"", ",",
+         "\n", "\t\t", 
+        "\"\<a smooth decline/increase or most likely no change at all\>\"", 
+        ",", "\"\<a very smooth increase\>\"", ",", 
+        "\"\<a very smooth increase\>\"", ",", "\n", "\t\t", 
+        "\"\<a smooth increase\>\"", ",", "\"\<a sharp increase\>\"", ",", 
+        "\"\<a very sharp increase\>\""}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"final", " ", "=", " ", 
+      RowBox[{"Table", "[", "\n", "\t\t", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"strings", "[", 
+           RowBox[{"[", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"dont", "[", 
+                   RowBox[{"[", "x", "]"}], "]"}], "\[GreaterEqual]", "  ", 
+                  "0.5"}], ")"}], "||", " ", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"dont", "[", 
+                   RowBox[{"[", "x", "]"}], "]"}], " ", "<", " ", "0.1"}], 
+                 ")"}]}], ")"}], ",", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"Round", "[", 
+                  RowBox[{
+                   RowBox[{"dont", "[", 
+                    RowBox[{"[", "x", "]"}], "]"}], ",", "0.1"}], "]"}], "*", 
+                 "10"}], ")"}], "+", "1"}], ",", " ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"Round", "[", 
+                 RowBox[{
+                  RowBox[{"dont", "[", 
+                   RowBox[{"[", "x", "]"}], "]"}], ",", "0.1"}], "]"}], "*", 
+                "10"}], " ", ")"}]}], "]"}], "]"}], "]"}], ",", "\n", 
+          "\t\t\t", "\"\< that ends at x = \>\"", ",", 
+          RowBox[{"ToString", "[", 
+           RowBox[{"intervals", "[", 
+            RowBox[{"[", 
+             RowBox[{"x", ",", "2"}], "]"}], "]"}], "]"}], ",", 
+          "\"\< then \>\""}], "}"}], ",", "\n", "\t\t", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", "1", ",", 
+          RowBox[{"Length", "[", "dont", "]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"final1", " ", "=", " ", 
+      RowBox[{"final", "//", " ", "Flatten"}]}], ";", "\[IndentingNewLine]", 
+     "\t", 
+     RowBox[{"justreturn", " ", "=", " ", 
+      RowBox[{"StringJoin", "[", 
+       RowBox[{
+       "nice", ",", "globalmax1", ",", "globalmin1", ",", "dal", ",", 
+        "final1"}], "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"finala", " ", "=", " ", 
+      RowBox[{
+       RowBox[{"StringTake", "[", 
+        RowBox[{"justreturn", ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", 
+           RowBox[{
+            RowBox[{"Length", "[", "justreturn", "]"}], "-", "7"}]}], "}"}]}],
+         "]"}], "<>", "\"\<.\>\""}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"Sow", "[", 
+      RowBox[{"finala", ",", "\"\<speak\>\""}], "]"}], ";", 
+     "\[IndentingNewLine]", "\t", 
+     RowBox[{"Return", "[", "finala", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.771717327749742*^9, 3.7717173282600393`*^9}, {
+   3.771755681843408*^9, 3.771755707618898*^9}, {3.7717557409865437`*^9, 
+   3.771755787004231*^9}, {3.771857903768403*^9, 3.77185790461341*^9}, 
+   3.771863464799727*^9, {3.7718683684740047`*^9, 3.771868371292824*^9}, {
+   3.77186841285435*^9, 3.771868427030078*^9}, {3.771868457732615*^9, 
+   3.771868487265936*^9}, {3.7719297205262403`*^9, 3.771929802373068*^9}, {
+   3.771929922818348*^9, 
+   3.771929928641759*^9}},ExpressionUUID->"29ebec7f-79cf-427d-a26c-\
+b27ef2a632c3"],
+
+Cell["Putting it all together.", "Text",
+ CellChangeTimes->{{3.771857505262662*^9, 
+  3.771857527352463*^9}},ExpressionUUID->"01704eae-f3fc-4970-801e-\
+84653fac92dd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"myFunc", "[", 
+   RowBox[{"xa_", ",", "na_", ",", "sa_"}], "]"}], ":=", 
+  "\[IndentingNewLine]", "\t", 
+  RowBox[{"Last", "@", 
+   RowBox[{"Reap", "[", "\[IndentingNewLine]", "\t\t", 
+    RowBox[{
+     RowBox[{"JustPlotIt", "[", 
+      RowBox[{"xa", ",", "na", ",", "sa"}], "]"}], ";", "\[IndentingNewLine]",
+      "\t\t", 
+     RowBox[{"JustStateIt", "[", "xa", "]"}], ";", "\[IndentingNewLine]", 
+     "\t\t", 
+     RowBox[{"Periodicity1", "[", "xa", "]"}], ";", "\[IndentingNewLine]", 
+     "\t\t", 
+     RowBox[{"Domaini", "[", "xa", "]"}], ";", "\[IndentingNewLine]", "\t\t", 
+     
+     RowBox[{"Exponentit", "[", "xa", "]"}], ";", "\[IndentingNewLine]", 
+     "\t\t", 
+     RowBox[{"MaxMin", "[", 
+      RowBox[{"xa", ",", "na", ",", "sa"}], "]"}], ";"}], 
+    "\[IndentingNewLine]", "\t", "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.771755848644993*^9, 3.771755863219614*^9}, {
+  3.771857502729493*^9, 3.7718575107480993`*^9}, {3.7719298170250273`*^9, 
+  3.771929831736081*^9}},ExpressionUUID->"1926343b-be5e-438e-880d-\
+56dc519e3c30"],
+
+Cell["Testing.", "Text",
+ CellChangeTimes->{{3.771857934925536*^9, 
+  3.771857939869128*^9}},ExpressionUUID->"718f9b31-ff14-435a-bc33-\
+254e5903082a"],
+
+Cell[BoxData[
+ RowBox[{"Style", "[", 
+  RowBox[{"StringJoin", "[", 
+   RowBox[{
+    RowBox[{"Part", "[", 
+     RowBox[{
+      RowBox[{"myFunc", "[", 
+       RowBox[{"\"\<Sin[Sqrt[2] x]+Sin[x]\>\"", ",", 
+        RowBox[{"-", "10"}], ",", "10"}], "]"}], " ", "//", "Flatten"}], 
+     "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"2", ";;", "6"}], "]"}], "]"}], "]"}], "]"}]], "Code",
+ CellChangeTimes->{{3.7717560703092823`*^9, 3.7717560860856657`*^9}, {
+  3.77177014790806*^9, 3.7717701482407303`*^9}, {3.7718430339476967`*^9, 
+  3.771843039833315*^9}, {3.771843077081115*^9, 3.771843167252684*^9}, {
+  3.771843204310417*^9, 3.771843213907983*^9}, {3.771843333559174*^9, 
+  3.7718433353790216`*^9}, {3.7718579203601093`*^9, 
+  3.771857921141941*^9}},ExpressionUUID->"0fd6d8fb-3047-44a9-8fa6-\
+d17c300f7429"],
+
+Cell[CellGroupData[{
+
+Cell["Sonification of the results", "Subsubsection",
+ CellChangeTimes->{{3.771775162841185*^9, 3.7717752005439053`*^9}, {
+  3.771929938980504*^9, 
+  3.771929941396216*^9}},ExpressionUUID->"829c8de0-5892-47a4-97fa-\
+b7a11366cc4a"],
+
+Cell["\<\
+The inspiration of this task came from the possible correlation between image \
+and sound.  After sampling the points from a plot, magnifying the y-values \
+and wrapping them around a time series, \[OpenCurlyDoubleQuote]AudioGenerator\
+\[CloseCurlyDoubleQuote] was used to map them to an audio signal for a \
+duration t.\
+\>", "Text",
+ CellChangeTimes->{{3.771775280194461*^9, 3.7717753535706387`*^9}, {
+  3.771775480285385*^9, 3.7717756183579073`*^9}, {3.771775880751049*^9, 
+  3.7717758911258574`*^9}},ExpressionUUID->"8fb2d269-b093-45b9-94e2-\
+1f57a3f88554"],
+
+Cell[BoxData[{
+ RowBox[{"xa", " ", "=", " ", 
+  RowBox[{"TimeSeries", "[", 
+   RowBox[{
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"List", "@@", 
+        RowBox[{"Plot", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"Sin", "[", 
+              RowBox[{
+               RowBox[{"Sqrt", "[", "2", "]"}], "*", "x"}], "]"}], "+", 
+             RowBox[{"Sin", "[", "x", "]"}]}], ")"}], " ", "*", " ", "500"}], 
+          ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", "1", ",", "20"}], "}"}]}], "]"}]}], ")"}], ",", 
+      "_Line", ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "Infinity"}], "}"}]}], "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}]}], "\n", 
+ RowBox[{"xa1", " ", "=", " ", 
+  RowBox[{"TimeSeries", "[", 
+   RowBox[{
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"List", "@@", 
+        RowBox[{"Plot", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"Sin", "[", "x", "]"}], ")"}], " ", "*", " ", "500"}], 
+          ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", "1", ",", "20"}], "}"}]}], "]"}]}], ")"}], ",", 
+      "_Line", ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "Infinity"}], "}"}]}], "]"}], "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}], "]"}]}]}], "Code",
+ CellChangeTimes->{{3.7716926147424192`*^9, 3.7716927741188602`*^9}, {
+  3.771692823417036*^9, 3.7716928259200277`*^9}, {3.771764327224769*^9, 
+  3.77176432894865*^9}, {3.771850040004669*^9, 3.7718501718162203`*^9}, {
+  3.7718581785900497`*^9, 
+  3.771858179692972*^9}},ExpressionUUID->"0baffc5c-992e-422b-a842-\
+0f07795b42db"],
+
+Cell["Generating and combining audios.", "Text",
+ CellChangeTimes->{{3.771858398801238*^9, 
+  3.771858413336212*^9}},ExpressionUUID->"8d3d5fab-e567-430f-a7e1-\
+63f64073ae2b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"a", " ", "=", " ", 
+   RowBox[{"AudioGenerator", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<Triangle\>\"", ",", "xa"}], "}"}], ",", "20"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", " ", "=", " ", 
+   RowBox[{"AudioGenerator", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\"\<Sin\>\"", ",", "xa1"}], "}"}], ",", "20"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"c", " ", "=", " ", 
+   RowBox[{"AudioChannelCombine", "[", 
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b", ",", "c"}], "}"}], "]"}]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.771841938122066*^9, 3.771841946137774*^9}, {
+  3.77184198070452*^9, 3.771841983084854*^9}, {3.7718501347280893`*^9, 
+  3.771850135051446*^9}, {3.771858194358522*^9, 3.771858203242723*^9}, {
+  3.7718582350908623`*^9, 
+  3.771858241074622*^9}},ExpressionUUID->"80a91c71-8311-4a94-8bc3-\
+e7d611b75552"],
+
+Cell[TextData[StyleBox["A machine learning approach", "Subsection"]], "Text",
+ CellChangeTimes->{{3.7717559216735888`*^9, 3.7717559309209127`*^9}, {
+  3.771755974432177*^9, 
+  3.771756006870788*^9}},ExpressionUUID->"1083f843-0542-4a45-8bd8-\
+e9b689568fb2"],
+
+Cell["\<\
+Feature extraction on a defined function within a pre-defined domain is a \
+relatively simple task. However, designing a program that highlights plots\
+\[CloseCurlyQuote] features and generates a meaningful caption from a given \
+graph is a more complex problem. The problem was reduced to a multi \
+classification sub-problem. A supervised learning methodology was used to \
+solve it. Automatically describing the content of an image is in fact a \
+fundamental problem in artificial intelligence that connects computer vision \
+and natural language processing. Meanwhile, curve captioning using deep \
+learning needs a huge amount of natural sentences and semantic knowledge \
+which is indeed time consuming. This work introduces a simple application of \
+machine translation that aims at mapping a plot to its shape.\
+\>", "Text",
+ CellChangeTimes->{{3.77175601507087*^9, 3.771756016166354*^9}, {
+   3.771756090964086*^9, 3.771756120158958*^9}, {3.7717561563684273`*^9, 
+   3.771756190981439*^9}, {3.771756223270898*^9, 3.771756280460573*^9}, {
+   3.7717565035915327`*^9, 3.771756550248489*^9}, {3.771756640618441*^9, 
+   3.771756668140667*^9}, {3.771756722789562*^9, 3.771756789052891*^9}, {
+   3.7717583736368103`*^9, 3.771758413278077*^9}, {3.7717585061092453`*^9, 
+   3.771758516006425*^9}, {3.771758565504524*^9, 3.771758611758855*^9}, {
+   3.771758668110179*^9, 3.771758749971327*^9}, {3.77175878203806*^9, 
+   3.771758828850136*^9}, {3.771758864005796*^9, 3.771759004044442*^9}, {
+   3.771759034779058*^9, 3.771759056563135*^9}, {3.771759124595336*^9, 
+   3.771759241209847*^9}, {3.7717607131766577`*^9, 3.771760715319272*^9}, {
+   3.771760889204563*^9, 3.771760900426305*^9}, {3.771761196948544*^9, 
+   3.771761203133985*^9}, 
+   3.771761236912294*^9},ExpressionUUID->"3f879954-bbcb-4e93-9177-\
+a820bdbcda68"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Data generation", "Subsubsection",
+ CellChangeTimes->{{3.77176092389809*^9, 
+  3.7717609357369967`*^9}},ExpressionUUID->"0b316890-0e65-47df-8919-\
+7df5d75d54df"],
+
+Cell["\<\
+An algorithm was developed to generate a set of random coefficients for \
+quadratic and hyperbolic functions and their corresponding plots within a \
+pre-defined x-range. The images were binarized to provide a more contextual \
+data representation. A training set of 1000 labeled examples and a testing \
+set of 100 labeled examples were created. Three target classes were evaluated \
+: \[OpenCurlyDoubleQuote]Ascending Parabola\[CloseCurlyDoubleQuote],\
+\[CloseCurlyDoubleQuote]Descending Parabola\[CloseCurlyDoubleQuote] and \
+\[OpenCurlyDoubleQuote]Hyperbolic function\[CloseCurlyDoubleQuote].\
+\>", "Text",
+ CellChangeTimes->{{3.771760946640909*^9, 3.771761179525457*^9}, {
+   3.771761253348139*^9, 3.7717612865477867`*^9}, 3.7718031456884747`*^9, 
+   3.7718416458637257`*^9, {3.771926701946845*^9, 
+   3.7719267052260942`*^9}},ExpressionUUID->"d00de928-a43d-4276-916f-\
+15a6626f1830"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Data", " ", "generation", " ", "and", " ", "preprocessing"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"na", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1000"}], ",", "1000"}], "}"}], "]"}], ",", "1000"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"xa", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1000"}], ",", "1000"}], "}"}], "]"}], ",", "1000"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"da", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1000"}], ",", "1000"}], "}"}], "]"}], ",", "1000"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"exp", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "100"}], ",", "100"}], "}"}], "]"}], ",", "1000"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"na1", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1000"}], ",", "1000"}], "}"}], "]"}], ",", "100"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"xa1", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1000"}], ",", "1000"}], "}"}], "]"}], ",", "100"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"da1", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1000"}], ",", "1000"}], "}"}], "]"}], ",", "100"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"exp1", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"RandomInteger", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "100"}], ",", "100"}], "}"}], "]"}], ",", "100"}], 
+      "]"}]}], ";"}]}]}]], "Code",
+ CellChangeTimes->{{3.771760718231669*^9, 3.7717607631585627`*^9}, {
+   3.7717608070778503`*^9, 3.7717608222294483`*^9}, 3.77184166100807*^9, 
+   3.7718417495746813`*^9, {3.771857962377284*^9, 
+   3.771857964325102*^9}},ExpressionUUID->"32e80f1d-9223-48d5-89dd-\
+98f4542f2db3"],
+
+Cell["Training set generation.", "Text",
+ CellChangeTimes->{{3.771858295488077*^9, 
+  3.7718583028324013`*^9}},ExpressionUUID->"2aad3373-0aef-408e-af69-\
+3b7566ee943b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"association", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Binarize", "[", 
+       RowBox[{"Plot", "[", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"da", "[", 
+              RowBox[{"[", "xal", "]"}], "]"}], ")"}], "*", 
+            RowBox[{"(", 
+             RowBox[{"x", "^", "2"}], ")"}]}], ")"}], "+", 
+          RowBox[{"x", "*", 
+           RowBox[{"xa", "[", 
+            RowBox[{"[", "xal", "]"}], "]"}]}], "+", 
+          RowBox[{"exp", "[", 
+           RowBox[{"[", "xal", "]"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"-", "10"}], ",", "10"}], "}"}], ",", 
+         RowBox[{"Axes", "\[Rule]", " ", "False"}], ",", "\n", "\t", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "1000"}], ",", "1000"}], "}"}]}]}], "]"}], "]"}], 
+      "\[Rule]", " ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"da", "[", 
+           RowBox[{"[", "xal", "]"}], "]"}], ")"}], ">", "0"}], ",", 
+        "\"\<Ascending Parabola\>\"", ",", "\"\<Descending Parabola\>\""}], 
+       "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"xal", ",", "1", ",", "1000", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"association1", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Binarize", "[", 
+       RowBox[{"Plot", "[", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"da", "[", 
+              RowBox[{"[", "xal", "]"}], "]"}], "+", 
+             RowBox[{"(", "x", ")"}]}], ")"}], "/", 
+           RowBox[{"(", "x", ")"}]}], "+", 
+          RowBox[{"na", "[", 
+           RowBox[{"[", "xal", "]"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"-", "10"}], ",", "10"}], "}"}], ",", 
+         RowBox[{"Axes", "\[Rule]", " ", "False"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "1000"}], ",", "1000"}], "}"}]}]}], "]"}], "]"}], 
+      "\[Rule]", " ", "\"\<Hyperbolic\>\""}], ",", 
+     RowBox[{"{", 
+      RowBox[{"xal", ",", "1", ",", "1000", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"TrainSet", " ", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{"association", ",", "association1"}], "]"}]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.771857986661696*^9, 3.7718579870452642`*^9}, {
+  3.771926971179093*^9, 3.771926971994323*^9}, {3.7719300989717712`*^9, 
+  3.7719300994678383`*^9}},ExpressionUUID->"0f9fb4eb-b5e0-4c7e-867f-\
+47fdecab77b6"],
+
+Cell["Test set generation. ", "Text",
+ CellChangeTimes->{{3.7718582741448383`*^9, 
+  3.7718583044083853`*^9}},ExpressionUUID->"43576e8e-4a40-497c-ac5f-\
+3f3c119d9f5a"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"association1test", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Binarize", "[", 
+       RowBox[{"Plot", "[", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"da1", "[", 
+              RowBox[{"[", "xal", "]"}], "]"}], "+", 
+             RowBox[{"(", "x", ")"}]}], ")"}], "/", 
+           RowBox[{"(", "x", ")"}]}], "+", 
+          RowBox[{"na1", "[", 
+           RowBox[{"[", "xal", "]"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"-", "10"}], ",", "10"}], "}"}], ",", 
+         RowBox[{"Axes", "\[Rule]", " ", "False"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "1000"}], ",", "1000"}], "}"}]}]}], "]"}], "]"}], 
+      "\[Rule]", " ", "\"\<Hyperbolic\>\""}], ",", 
+     RowBox[{"{", 
+      RowBox[{"xal", ",", "1", ",", "100", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"associationtest2", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Binarize", "[", 
+       RowBox[{"Plot", "[", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"da1", "[", 
+              RowBox[{"[", "xal", "]"}], "]"}], ")"}], "*", 
+            RowBox[{"(", 
+             RowBox[{"x", "^", "2"}], ")"}]}], ")"}], "+", 
+          RowBox[{"x", "*", 
+           RowBox[{"xa1", "[", 
+            RowBox[{"[", "xal", "]"}], "]"}]}], "+", 
+          RowBox[{"exp1", "[", 
+           RowBox[{"[", "xal", "]"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"-", "10"}], ",", "10"}], "}"}], ",", 
+         RowBox[{"Axes", "\[Rule]", " ", "False"}], ",", "\n", "\t", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "1000"}], ",", "1000"}], "}"}]}]}], "]"}], "]"}], 
+      "\[Rule]", " ", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"da1", "[", 
+           RowBox[{"[", "xal", "]"}], "]"}], ")"}], ">", "0"}], ",", 
+        "\"\<Ascending Parabola\>\"", ",", "\"\<Descending Parabola\>\""}], 
+       "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"xal", ",", "1", ",", "100", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"TestSet", " ", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{"associationtest", ",", "association1test"}], "]"}]}], 
+  ";"}]}], "Code",
+ CellChangeTimes->{{3.771760779845652*^9, 3.771760780206311*^9}, {
+  3.771760827372493*^9, 3.771760842004281*^9}, {3.771857980583735*^9, 
+  3.771857992877122*^9}, {3.771858071663293*^9, 3.771858077855363*^9}, {
+  3.771858267371572*^9, 3.771858268370648*^9}, {3.7719300876922626`*^9, 
+  3.7719300951553907`*^9}},ExpressionUUID->"e2a138ea-40e0-4096-9cb3-\
+52f6041d389a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Experiments", "Subsubsection",
+ CellChangeTimes->{{3.77176132420278*^9, 3.771761342105616*^9}, {
+  3.771761383196145*^9, 
+  3.7717613931314363`*^9}},ExpressionUUID->"107e64f5-8748-4128-8961-\
+943f2f4ce85c"],
+
+Cell["\<\
+The pre-built \[OpenCurlyDoubleQuote]Classify\[CloseCurlyDoubleQuote] \
+function was first used to fit the data. Fine-tuning  was then performed on \
+the pre-trained \[OpenCurlyDoubleQuote]Resnet-50\[CloseCurlyDoubleQuote] and \
+\[OpenCurlyDoubleQuote]Inception-V3\[CloseCurlyDoubleQuote] collected using \
+the neural network repository. The final softmax layers were removed and \
+replaced by a new set of fully connected layers with random initializations. \
+From there, all layers below the head are frozen so their weights cannot be \
+updated .The net was then trained using a very small learning rate so the new \
+set of fully connected layers can learn patterns from the previously learned \
+CONV layers earlier in the network. This process is called allowing the FC \
+layers to \[OpenCurlyDoubleQuote]warm up\[CloseCurlyDoubleQuote]. The overall \
+method is called \[OpenCurlyDoubleQuote]network surgery\
+\[CloseCurlyDoubleQuote].\
+\>", "Text",
+ CellChangeTimes->{{3.77176140122008*^9, 3.771761432882667*^9}, {
+   3.771761497960924*^9, 3.771761502119821*^9}, {3.771761581342252*^9, 
+   3.7717615892459993`*^9}, {3.771761691357939*^9, 3.771761711529056*^9}, {
+   3.771761854999646*^9, 3.771761915381679*^9}, {3.771762004838779*^9, 
+   3.771762013918067*^9}, {3.771762069031088*^9, 3.771762291962367*^9}, {
+   3.7717624313356733`*^9, 3.771762447262781*^9}, 
+   3.771926728113798*^9},ExpressionUUID->"af7765ec-ac11-4705-bc95-\
+297856b0a8c0"],
+
+Cell[BoxData[{
+ RowBox[{"tempNet", "=", 
+  RowBox[{"Take", "[", 
+   RowBox[{
+    RowBox[{
+    "NetModel", "[", 
+     "\"\<Inception V3 Trained on ImageNet Competition Data\>\"", "]"}], ",", 
+    
+    RowBox[{"{", 
+     RowBox[{"1", ",", 
+      RowBox[{"-", "4"}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"newNet", "=", 
+  RowBox[{"NetChain", "[", 
+   RowBox[{
+    RowBox[{"<|", 
+     RowBox[{
+      RowBox[{"\"\<pretrainedNet\>\"", "\[Rule]", "tempNet"}], ",", 
+      RowBox[{"\"\<linearNew\>\"", "\[Rule]", 
+       RowBox[{"LinearLayer", "[", "]"}]}], ",", 
+      RowBox[{"\"\<softmax\>\"", "\[Rule]", 
+       RowBox[{"SoftmaxLayer", "[", "]"}]}]}], "|>"}], ",", "\n", "\t", 
+    RowBox[{"\"\<Output\>\"", "\[Rule]", 
+     RowBox[{"NetDecoder", "[", 
+      RowBox[{"{", 
+       RowBox[{"\"\<Class\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<Ascending Parabola\>\"", ",", "\"\<Hyperbolic\>\"", ",", 
+          "\"\<Descending Parabola\>\""}], "}"}]}], "}"}], "]"}]}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"trainedNet", "=", 
+  RowBox[{"NetTrain", "[", 
+   RowBox[{"newNet", ",", "TrainSet", ",", 
+    RowBox[{"LearningRateMultipliers", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\"\<linearNew\>\"", "\[Rule]", "1"}], ",", 
+       RowBox[{"_", "\[Rule]", "0"}]}], "}"}]}]}], "]"}]}]}], "Code",
+ CellChangeTimes->{{3.7717625189089117`*^9, 3.771762519677807*^9}, {
+  3.771858118309946*^9, 3.771858122917389*^9}, {3.771930030411047*^9, 
+  3.7719300382124233`*^9}},ExpressionUUID->"411c613f-a885-4298-bbb4-\
+f57f02149cab"],
+
+Cell[BoxData[{
+ RowBox[{"tempNet1", "=", 
+  RowBox[{"Take", "[", 
+   RowBox[{
+    RowBox[{
+    "NetModel", "[", 
+     "\"\<ResNet-152 Trained on ImageNet Competition Data\>\"", "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", 
+      RowBox[{"-", "4"}]}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"newNet1", "=", 
+  RowBox[{"NetChain", "[", 
+   RowBox[{
+    RowBox[{"<|", 
+     RowBox[{
+      RowBox[{"\"\<pretrainedNet\>\"", "\[Rule]", "tempNet"}], ",", 
+      RowBox[{"\"\<linearNew\>\"", "\[Rule]", 
+       RowBox[{"LinearLayer", "[", "]"}]}], ",", 
+      RowBox[{"\"\<softmax\>\"", "\[Rule]", 
+       RowBox[{"SoftmaxLayer", "[", "]"}]}]}], "|>"}], ",", "\n", "\t", 
+    RowBox[{"\"\<Output\>\"", "\[Rule]", 
+     RowBox[{"NetDecoder", "[", 
+      RowBox[{"{", 
+       RowBox[{"\"\<Class\>\"", ",", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<Ascending Parabola\>\"", ",", "\"\<Descending Parabola\>\"", 
+          ",", "\"\<Hyperbolic\>\""}], "}"}]}], "}"}], "]"}]}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"trainedNet1", "=", 
+  RowBox[{"NetTrain", "[", 
+   RowBox[{"newNet", ",", "TrainSet", ",", 
+    RowBox[{"LearningRateMultipliers", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\"\<linearNew\>\"", "\[Rule]", "1"}], ",", 
+       RowBox[{"_", "\[Rule]", "0"}]}], "}"}]}]}], "]"}]}]}], "Code",
+ CellChangeTimes->{{3.771930045220932*^9, 
+  3.771930051236018*^9}},ExpressionUUID->"dff85be2-ee00-4616-a7ca-\
+4053ed51d03a"],
+
+Cell["\<\
+A custom model architecture similar to \[OpenCurlyDoubleQuote]Le-Net\
+\[CloseCurlyDoubleQuote] was implemented to evaluate the dataset. The model \
+architecture consists of two convolutional blocks each consisting of a \
+convolution layer, a pooling layer and \[OpenCurlyDoubleQuote]Relu\
+\[CloseCurlyDoubleQuote] as an activation function. The net was trained using \
+cross entropy for 1000 iterations with an initial learning rate of 0.1 .\
+\>", "Text",
+ CellChangeTimes->{{3.771762789218313*^9, 3.771762790505278*^9}, {
+  3.7717634754755573`*^9, 3.771763510777727*^9}, {3.7717640568670177`*^9, 
+  3.7717641244758587`*^9}, {3.771770164375393*^9, 3.771770250806175*^9}, {
+  3.771770513728241*^9, 3.7717705712298937`*^9}, {3.771770859009055*^9, 
+  3.7717708850876007`*^9}, {3.771770941303001*^9, 3.771770945910507*^9}, {
+  3.771771041709141*^9, 3.7717710697318153`*^9}, {3.7717716394973907`*^9, 
+  3.771771653928093*^9}, {3.771772054130569*^9, 3.7717720724256687`*^9}, {
+  3.771772523666432*^9, 3.771772536182271*^9}, {3.771772577402309*^9, 
+  3.771772579609387*^9}, {3.771774273729855*^9, 
+  3.771774305447098*^9}},ExpressionUUID->"cf74a1fc-4a78-4733-bed0-\
+0faed6f88ee9"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"uninitializedLenet", "=", 
+   RowBox[{"NetChain", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"ConvolutionLayer", "[", 
+        RowBox[{"20", ",", "5"}], "]"}], ",", 
+       RowBox[{"ElementwiseLayer", "[", "Ramp", "]"}], ",", 
+       RowBox[{"PoolingLayer", "[", 
+        RowBox[{"2", ",", "2"}], "]"}], ",", "\n", "\t", 
+       RowBox[{"ConvolutionLayer", "[", 
+        RowBox[{"50", ",", "5"}], "]"}], ",", 
+       RowBox[{"ElementwiseLayer", "[", "Ramp", "]"}], ",", 
+       RowBox[{"PoolingLayer", "[", 
+        RowBox[{"2", ",", "2"}], "]"}], ",", 
+       RowBox[{"FlattenLayer", "[", "]"}], ",", 
+       RowBox[{"LinearLayer", "[", "500", "]"}], ",", "\n", "\t", 
+       RowBox[{"ElementwiseLayer", "[", "Ramp", "]"}], ",", 
+       RowBox[{"LinearLayer", "[", "3", "]"}], ",", 
+       RowBox[{"DropoutLayer", "[", "0.6", "]"}], ",", 
+       RowBox[{"SoftmaxLayer", "[", "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<Output\>\"", "\[Rule]", 
+      RowBox[{"NetDecoder", "[", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Class\>\"", ",", 
+         RowBox[{"{", 
+          RowBox[{
+          "\"\<Ascending Parabola\>\"", ",", "\"\<Descending Parabola\>\"", 
+           ",", "\"\<Hyperbolic\>\""}], "}"}]}], "}"}], "]"}]}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"trainedNet12", "=", 
+   RowBox[{"NetTrain", "[", 
+    RowBox[{"uninitializedLenet", ",", "All", ",", "TrainSet", ",", 
+     RowBox[{"ValidationSet", "\[Rule]", "ValidationSet"}]}], "]"}]}], 
+  ";"}]}], "Code",
+ CellChangeTimes->{{3.7717750274591427`*^9, 3.7717750367074623`*^9}, {
+  3.771858336632841*^9, 3.771858338456348*^9}, {3.771858375610371*^9, 
+  3.771858378353779*^9}, {3.771930058380765*^9, 
+  3.771930075780545*^9}},ExpressionUUID->"0938c9d8-c68b-4b3c-9082-\
+60fc551408ed"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Results", "Section",
+ CellChangeTimes->{{3.7717789736222887`*^9, 
+  3.771778991349083*^9}},ExpressionUUID->"37d4a804-3cc0-459a-b865-\
+30c0292fd746"],
+
+Cell[CellGroupData[{
+
+Cell["General discussion", "Subsubsection",
+ CellChangeTimes->{{3.771778999084592*^9, 3.77177902683916*^9}, {
+  3.771802236790037*^9, 
+  3.7718022382845488`*^9}},ExpressionUUID->"f0d2ac24-084f-4bbd-951b-\
+df9f5deaa91a"],
+
+Cell["\<\
+The heuristic approach demonstrated good results when tested with \
+trigonometric and polynomial continuous functions. There are still some \
+upgrades to implement before this code is ready for wide scale use. The \
+generated sounds showed a correlation between the actual plot and the audio \
+signal. The  pre-trained models function outperformed all other methods when \
+it comes to the accuracy metrics from the test set. Neither of the three \
+methods achieved less than 80%. Dropout increased the accuracy by a general \
+factor of 1 which explains its impact on the weights\[CloseCurlyQuote] \
+robustness. There was no evidence of overfitting as the validation set \
+tracked the training set during the training regimen. I tried visualizing the \
+results using the ROC curve, the confusion matrix plot, the error rate and \
+the precision.
+\
+\>", "Text",
+ CellChangeTimes->{{3.771779108951056*^9, 3.7717791257417803`*^9}, {
+   3.771780761341834*^9, 3.771780796580702*^9}, {3.771780917389346*^9, 
+   3.771780920501309*^9}, 3.771781281665344*^9, 3.7717816714003*^9, {
+   3.771781750459771*^9, 3.771782042281659*^9}, {3.771782100315974*^9, 
+   3.771782167948612*^9}, {3.771782215634512*^9, 3.771782247257566*^9}, {
+   3.771926755513281*^9, 3.771926809262429*^9}, {3.771926996116356*^9, 
+   3.771926998898435*^9}},ExpressionUUID->"654337bc-651f-440b-9b06-\
+7f38865deb7f"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Future enhancements ", "Section",
+ CellChangeTimes->{{3.771782328900579*^9, 3.771782334587967*^9}, {
+  3.7718407185926857`*^9, 
+  3.771840727662539*^9}},ExpressionUUID->"8a9c7edf-e04e-4814-b51a-\
+961e3bb2115b"],
+
+Cell["\<\
+Extending this work to times series plots could have end-to-end impacts on a \
+wide range of research fields. I think that generalizing these methods to \
+other heuristic solutions in image captioning and integrating these \
+techniques in a large platform for the visually impaired people could provide \
+a life-changing experience for them.\
+\>", "Text",
+ CellChangeTimes->{{3.771840749893779*^9, 3.771840751149481*^9}, 
+   3.771840863105043*^9},ExpressionUUID->"652f3df6-6bed-439a-99c7-\
+6f4ecb598414"]
+}, Closed]]
+}, Open  ]]
+},
+WindowSize->{720, 703},
+WindowMargins->{{3, Automatic}, {Automatic, 0}},
+DockedCells->{
+  Cell[
+   TextData[{
+     StyleBox["  WOLFRAM ", 
+      RGBColor[0.97, 0.83, 0.35], FontFamily -> "Source Sans Pro", FontWeight -> 
+      Bold, FontSize -> 40], 
+     StyleBox["SUMMER SCHOOL", 
+      GrayLevel[1], FontFamily -> "Source Sans Pro", FontSize -> 40], 
+     StyleBox[" 2019", 
+      RGBColor[0.97, 0.83, 0.35], FontFamily -> "Source Sans Pro", FontSize -> 
+      40]}], CellFrameMargins -> 10, Background -> 
+   RGBColor[0.12, 0.14, 0.15]]},
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 381, 6, 160, "Title",ExpressionUUID->"49ab34ee-bfd5-49f5-beef-400d3cc456dd"],
+Cell[964, 30, 498, 8, 35, "Text",ExpressionUUID->"94536f76-3fd2-4bf6-b228-fa93ec9acae9"],
+Cell[1465, 40, 459, 7, 35, "Text",ExpressionUUID->"b70c649b-a958-4202-9f22-238ea1f9c7d4"],
+Cell[CellGroupData[{
+Cell[1949, 51, 152, 3, 67, "Section",ExpressionUUID->"7836eb71-55f6-43e9-aeee-dafacc0f6eb0"],
+Cell[2104, 56, 1519, 23, 219, "Text",ExpressionUUID->"6e06f440-b214-4977-9023-45d488e9b243"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3660, 84, 159, 3, 53, "Section",ExpressionUUID->"0330886e-d4a0-4fe9-b567-9ca5e46fbea2"],
+Cell[3822, 89, 1702, 26, 104, "Text",ExpressionUUID->"a8de2301-4b29-4b75-a65a-ed4b028f54af"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[5561, 120, 152, 3, 53, "Section",ExpressionUUID->"c07678c6-24b5-4c74-b53d-dd8369ca0443"],
+Cell[CellGroupData[{
+Cell[5738, 127, 171, 3, 54, "Subsection",ExpressionUUID->"62557530-fa44-4803-8383-05a2d34381e5"],
+Cell[5912, 132, 1247, 19, 58, "Text",ExpressionUUID->"152167c8-9d78-46f4-8b0a-b4742f4052d9"],
+Cell[7162, 153, 824, 18, 148, "Code",ExpressionUUID->"b45b8977-a3c8-436b-a755-ef3b635e9b5a"],
+Cell[7989, 173, 454, 9, 58, "Text",ExpressionUUID->"bed829e1-1bf2-4be5-808c-10057af1c705"],
+Cell[8446, 184, 1708, 40, 205, "Code",ExpressionUUID->"0782d4a4-4e91-4c9e-bc1c-ba82eb6ca09d"],
+Cell[10157, 226, 298, 7, 35, "Text",ExpressionUUID->"a3076a03-ce33-42c9-a7c1-4afbd17aa5ca"],
+Cell[10458, 235, 1497, 38, 186, "Code",ExpressionUUID->"a4a61423-c0d6-435f-984b-279b76927d4b"],
+Cell[11958, 275, 296, 7, 35, "Text",ExpressionUUID->"31afaa5e-76c5-46f2-9c0a-9750347dba6e"],
+Cell[12257, 284, 1444, 34, 186, "Code",ExpressionUUID->"7e17d046-07b8-49ea-8449-bbd472beeaff"],
+Cell[13704, 320, 156, 3, 35, "Text",ExpressionUUID->"6ca0bad6-dc7a-49a3-9c78-633e2d8ca330"],
+Cell[13863, 325, 1000, 26, 186, "Code",ExpressionUUID->"bd136d9f-eae2-4bbd-b660-3eafe701dabe"],
+Cell[14866, 353, 922, 15, 104, "Text",ExpressionUUID->"b9115761-ac08-4cf9-96e4-401aedf213a1"],
+Cell[15791, 370, 13247, 330, 737, "Code",ExpressionUUID->"29ebec7f-79cf-427d-a26c-b27ef2a632c3"],
+Cell[29041, 702, 166, 3, 35, "Text",ExpressionUUID->"01704eae-f3fc-4970-801e-84653fac92dd"],
+Cell[29210, 707, 1077, 25, 205, "Code",ExpressionUUID->"1926343b-be5e-438e-880d-56dc519e3c30"],
+Cell[30290, 734, 150, 3, 35, "Text",ExpressionUUID->"718f9b31-ff14-435a-bc33-254e5903082a"],
+Cell[30443, 739, 806, 18, 52, "Code",ExpressionUUID->"0fd6d8fb-3047-44a9-8fa6-d17c300f7429"],
+Cell[CellGroupData[{
+Cell[31274, 761, 229, 4, 45, "Subsubsection",ExpressionUUID->"829c8de0-5892-47a4-97fa-b7a11366cc4a"],
+Cell[31506, 767, 571, 10, 58, "Text",ExpressionUUID->"8fb2d269-b093-45b9-94e2-1f57a3f88554"],
+Cell[32080, 779, 1760, 50, 72, "Code",ExpressionUUID->"0baffc5c-992e-422b-a842-0f07795b42db"],
+Cell[33843, 831, 174, 3, 35, "Text",ExpressionUUID->"8d3d5fab-e567-430f-a7e1-63f64073ae2b"],
+Cell[34020, 836, 923, 25, 91, "Code",ExpressionUUID->"80a91c71-8311-4a94-8bc3-e7d611b75552"],
+Cell[34946, 863, 256, 4, 41, "Text",ExpressionUUID->"1083f843-0542-4a45-8bd8-e9b689568fb2"],
+Cell[35205, 869, 1829, 27, 127, "Text",ExpressionUUID->"3f879954-bbcb-4e93-9177-a820bdbcda68"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[37071, 901, 167, 3, 45, "Subsubsection",ExpressionUUID->"0b316890-0e65-47df-8919-7df5d75d54df"],
+Cell[37241, 906, 899, 14, 81, "Text",ExpressionUUID->"d00de928-a43d-4276-916f-15a6626f1830"],
+Cell[38143, 922, 2754, 82, 205, "Code",ExpressionUUID->"32e80f1d-9223-48d5-89dd-98f4542f2db3"],
+Cell[40900, 1006, 168, 3, 35, "Text",ExpressionUUID->"2aad3373-0aef-408e-af69-3b7566ee943b"],
+Cell[41071, 1011, 2841, 79, 110, "Code",ExpressionUUID->"0f9fb4eb-b5e0-4c7e-867f-47fdecab77b6"],
+Cell[43915, 1092, 167, 3, 35, "Text",ExpressionUUID->"43576e8e-4a40-497c-ac5f-3f3c119d9f5a"],
+Cell[44085, 1097, 2989, 82, 110, "Code",ExpressionUUID->"e2a138ea-40e0-4096-9cb3-52f6041d389a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47111, 1184, 212, 4, 45, "Subsubsection",ExpressionUUID->"107e64f5-8748-4128-8961-943f2f4ce85c"],
+Cell[47326, 1190, 1455, 22, 104, "Text",ExpressionUUID->"af7765ec-ac11-4705-bc95-297856b0a8c0"],
+Cell[48784, 1214, 1582, 41, 110, "Code",ExpressionUUID->"411c613f-a885-4298-bbb4-f57f02149cab"],
+Cell[50369, 1257, 1479, 39, 110, "Code",ExpressionUUID->"dff85be2-ee00-4616-a7ca-4053ed51d03a"],
+Cell[51851, 1298, 1183, 18, 58, "Text",ExpressionUUID->"cf74a1fc-4a78-4733-bed0-0faed6f88ee9"],
+Cell[53037, 1318, 1841, 43, 129, "Code",ExpressionUUID->"0938c9d8-c68b-4b3c-9082-60fc551408ed"]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[54939, 1368, 154, 3, 53, "Section",ExpressionUUID->"37d4a804-3cc0-459a-b865-30c0292fd746"],
+Cell[CellGroupData[{
+Cell[55118, 1375, 219, 4, 45, "Subsubsection",ExpressionUUID->"f0d2ac24-084f-4bbd-951b-df9f5deaa91a"],
+Cell[55340, 1381, 1381, 22, 150, "Text",ExpressionUUID->"654337bc-651f-440b-9b06-7f38865deb7f"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[56770, 1409, 216, 4, 53, "Section",ExpressionUUID->"8a9c7edf-e04e-4814-b51a-961e3bb2115b"],
+Cell[56989, 1415, 514, 9, 58, "Text",ExpressionUUID->"652f3df6-6bed-439a-99c7-6f4ecb598414"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
